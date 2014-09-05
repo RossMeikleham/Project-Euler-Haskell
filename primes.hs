@@ -3,7 +3,9 @@
 import Data.List
 import Data.Array.ST
 import Control.Monad.ST
+import Control.Monad
 import Data.Array.Unboxed
+import Data.Array.Unsafe
 
 -- Very simple and inefficient primes library for
 -- help with solving certain Project Euler Problems
@@ -28,48 +30,16 @@ isPrime x
 obtainPrimesUpTo :: Int -> [Int]
 obtainPrimesUpTo n
     | n < 2 = []
-    | otherwise = primes $ elems $ obtainPrimes 1 initialArray
-    where initialArray = listArray (1, n) initialList
-          initialList = [False] ++ replicate (n - 1) True
+    | otherwise = [x | (x, True) <- assocs $ obtainPrimes n]
 
--- Convert List of Bools containing primes at each 'True' index
--- Into a list containing all primes 
-primes :: [Bool] -> [Int]
-primes xs = primes' 1 xs []
-
-
-primes' :: Int -> [Bool] -> [Int] -> [Int]
-primes' _ [] ys = ys 
-primes' n (x:xs) ys 
-    | x == True = primes' (n + 1) xs (ys ++ [n]) 
-    | otherwise = primes' (n + 1) xs ys
-
-obtainPrimes :: Int -> UArray Int Bool -> UArray Int Bool
-obtainPrimes n arr = 
-    case getNextPrime n arr of
-        Nothing -> arr
-        Just y -> obtainPrimes y $ markNotPrimes (2 * y) y arr
-
-
-getNextPrime :: Int -> UArray Int Bool -> Maybe (Int)
-getNextPrime n arr 
-    | n >= (snd $ bounds arr) = Nothing -- No primes in sieve 
-    | arr ! (n + 1) == True = Just (n + 1)
-    | otherwise           = getNextPrime (n + 1) arr
-
--- Sieve out all multiples of given non prime  which cannot be prime numbers
-markNotPrimes :: Int -> Int -> UArray Int Bool -> UArray Int Bool 
-markNotPrimes n inc arr = runSTUArray $ do
-    a <- thaw arr
-    (bot, top) <- getBounds a
-    mapM (\x -> writeArray a x False) $ [2,4..20000] -- nonPrimes top
-    return a
-    where nonPrimes top = takeWhile (<= top) $ nonPrimes' n inc
-          nonPrimes' n inc = [n] ++ nonPrimes' (n + inc) inc 
-
-main = 
-    do 
-        print $ sum $ obtainPrimesUpTo 20000
-       
-
-
+-- Generate Array of Bools, each index containing true
+-- if that index is a prime, false otherwise
+obtainPrimes :: Int -> UArray Int Bool
+obtainPrimes n = runSTUArray $ do 
+    sieve <- newArray (2, n) True
+    forM_ [2..n] $ \p -> do
+        isPrime <- readArray sieve p
+        when isPrime $ do
+            forM_ [p*2, p*3 .. n] $ \m -> do
+                writeArray sieve m False
+    return sieve
