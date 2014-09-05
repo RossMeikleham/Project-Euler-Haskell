@@ -1,4 +1,5 @@
 import Data.Maybe
+import Primes 
 
 --3
 --The prime factors of 13195 are 5, 7, 13 and 29. What is the largest prime factor of 
@@ -19,19 +20,3 @@ largestPrimeFactor' n lp
     | n < 2           = lp
     | n `mod` lp == 0 = largestPrimeFactor' (n `div` lp) lp  
     | otherwise       = largestPrimeFactor' n $ nextPrime lp 
-
-
---Given a positive integer x return
---the closest prime y where y > x
-nextPrime :: Int -> Int              
-nextPrime x 
-    | isPrime (x + 1) = (x + 1)
-    | otherwise       = nextPrime (x + 1)
-
-
--- Check if given number is prime
-isPrime :: Int -> Bool
-isPrime x  
-    | x < 2     = False
-    | otherwise = null [y | y <- [2..sqrtx], x `mod` y == 0]
-    where sqrtx = truncate $ sqrt $ fromIntegral x
