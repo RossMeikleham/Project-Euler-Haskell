@@ -1,4 +1,4 @@
---module Primes where
+module Primes where
 
 import Data.List
 import Data.Array.ST
@@ -27,8 +27,8 @@ isPrime x
 
 
 --Sieve of Eratosthenes for calculating primes below a given number
-obtainPrimesUpTo :: Int -> [Int]
-obtainPrimesUpTo n
+getPrimesUpTo :: Int -> [Int]
+getPrimesUpTo n
     | n < 2 = []
     | otherwise = [x | (x, True) <- assocs $ obtainPrimes n]
 
