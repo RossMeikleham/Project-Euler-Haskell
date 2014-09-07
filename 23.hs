@@ -25,18 +25,20 @@ import Control.Monad.ST
 import Control.Monad
 import Data.Array.Unboxed
 
-euler23 = sum [x | (x, True) <- assocs $ obtainNonAbundantSums abundantNos]
+euler23 = sum [x | (x, True) <- (assocs . obtainNonAbundantSums) $ abundantNos maxNo]
+
+maxNo = 28123
 
 obtainNonAbundantSums :: [Int] -> UArray Int Bool
 obtainNonAbundantSums abNos= runSTUArray $ do
-    arr <- newArray (1, 28123) True
+    arr <- newArray (1, maxNo) True
     forM_ abNos $ \m -> do
-        let xs = takeWhile (\a -> m + a <= 28123) $ dropWhile (< m) abNos
+        let xs = takeWhile (\a -> m + a <= maxNo) $ dropWhile (< m) abNos
         forM_ xs $ \n -> do
             writeArray arr (m + n) False
     return arr
 
-abundantNos = filter (\n -> sumProperDivisors n > n) [1..28123] 
+abundantNos n = filter (\n -> sumProperDivisors n > n) [1..n] 
 
 sumProperDivisors n 
   | n == 1    = 0
