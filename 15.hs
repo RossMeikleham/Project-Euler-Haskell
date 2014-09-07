@@ -10,4 +10,4 @@
 -- Number of paths to each vertex is equal to the sum of the paths
 -- leading to the left and above
 
-euler15 = iterate (scanl (+) 1 . tail) (repeat 1) !! 3 !! 1
+euler15 = iterate (scanl (+) 1 . tail) (repeat 1) !! 20 !! 20
