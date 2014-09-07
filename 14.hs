@@ -21,8 +21,6 @@ import Data.List
 import Data.Ord
 import qualified Data.Map as Map
 
---euler14 = maximumBy (comparing snd)
-
 euler14 = fst $ maximumBy (comparing snd) $ Map.toList $ f [2..1000000] startMap
     where startMap = Map.singleton 1 1
 

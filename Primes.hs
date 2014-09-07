@@ -5,7 +5,6 @@ import Data.Array.ST
 import Control.Monad.ST
 import Control.Monad
 import Data.Array.Unboxed
-import Data.Array.Unsafe
 
 -- Very simple and inefficient primes library for
 -- help with solving certain Project Euler Problems
