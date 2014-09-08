@@ -40,9 +40,9 @@ spiral formed in the same way?
 --  bottom left is n^2 - 2(n - 1)
 --  bottom right is n^2 - 3(n - 1)
 --  
---  total is 4n^2 - 6(n - 1) 
+--  total is 4n^2 - 6(n - 1) = 4n^2 -6n + 6
 --
 --  sum odd n from 1 to 1001
 
-euler28 = foldl (\a b -> a + diag b) (1) [3,5..1001]
-    where diag n = 4 * (n^2) - 6 * (n - 1)
+euler28 = foldl ((. diag) . (+)) (1) [3,5..1001]
+    where diag n = 4 * (n^2) - (6 * n) + 6
