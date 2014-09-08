@@ -41,13 +41,9 @@ import Primes
 
 euler26 = head $ dropWhile (\p -> getReciprocalLengthPrime p < p - 1) (reverse $ getPrimesUpTo' 999) 
 
-getReciprocalLengthPrime p 
-    | p == 2 || p == 5 = 0 
-    | otherwise = recipLengthPrime 1 p
-    where recipLengthPrime k p = 
-            if (10^k - 1) `mod` p == 0 
-                then k
-                else recipLengthPrime (k + 1) p 
+getReciprocalLengthPrime p  
+    | p == 2 || p == 5 = 0
+    | otherwise = head [k | k <- [1..], (10^k - 1) `mod` p == 0]
 
 getPrimesUpTo' :: Int -> [Integer]
 getPrimesUpTo' n = map (fromIntegral) $ getPrimesUpTo n     
