@@ -34,15 +34,14 @@ obtainNonAbundantSums abNos= runSTUArray $ do
     arr <- newArray (1, maxNo) True
     forM_ abNos $ \m -> do
         let xs = takeWhile (\a -> m + a <= maxNo) $ dropWhile (< m) abNos
-        forM_ xs $ \n -> do
-            writeArray arr (m + n) False
+        forM_ xs $ \n -> writeArray arr (m + n) False
     return arr
 
 abundantNos n = filter (\n -> sumProperDivisors n > n) [1..n] 
 
 sumProperDivisors n 
   | n == 1    = 0
-  | otherwise = (sum factors) - n
+  | otherwise = sum factors - n
     where factors = concatMap (\(x,y)-> if x /= y then [x,y] else [x]) $ factorPairs n
      
 factorPairs :: Int -> [(Int, Int)]
