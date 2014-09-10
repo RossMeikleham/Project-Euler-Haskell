@@ -33,7 +33,6 @@ For which value of p ≤ 1000, is the number of solutions maximised?
  -  odd + even + odd  gives an even p
 -} 
  
-import Data.Ratio 
 import Data.List
 import Data.Maybe
 import Data.Ord
@@ -52,9 +51,10 @@ getABC a p = getB a p >>= \b -> getC a b p >>= \c -> return (a, b, c)
 -- otherwise returns Nothing
 getB :: Int -> Int -> Maybe Int
 getB a p
-    | a == p || denominator b /= 1 = Nothing
-    | otherwise                   = Just $ numerator b
-    where b = ((2 * a * p) - p^2) % (2 * (a - p))
+    | lcm bNum bDen /= bNum = Nothing
+    | otherwise             = Just $ bNum `div` bDen
+    where bNum = (2 * a * p) - p^2
+          bDen =  2 * (a - p)
 
 -- Returns Just c if supplied a, b and n
 -- can generate a valid c >= 0 for triangle
