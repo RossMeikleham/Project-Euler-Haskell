@@ -31,6 +31,12 @@ getPrimesUpTo n
     | n < 2 = []
     | otherwise = [x | (x, True) <- assocs $ obtainPrimes n]
 
+
+getCompositesUpTo :: Int -> [Int]
+getCompositesUpTo n
+    | n < 2 = [1]
+    | otherwise = [x | (x, False) <- assocs $ obtainPrimes n]
+
 -- Generate Array of Bools, each index containing true
 -- if that index is a prime, false otherwise
 obtainPrimes :: Int -> UArray Int Bool
