@@ -1,0 +1,2 @@
+Temporarily list of external packages until I sort this into a cabal build:
+-arithmoi
