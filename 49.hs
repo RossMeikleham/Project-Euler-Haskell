@@ -29,4 +29,4 @@ result =
     where sx x = show x
           arePermutations (x:xs) = 
               and $ map (\n -> (sort . show) x == (sort . show) n) xs
-          arePrime xs = and $ (map (isPrime)) xs
+          arePrime = and . (map isPrime)
